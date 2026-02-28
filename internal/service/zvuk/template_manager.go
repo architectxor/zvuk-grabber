@@ -190,14 +190,12 @@ func (s *TemplateManagerImpl) GetAlbumFolderName(ctx context.Context, tags map[s
 
 	var sanitizedTags = make(map[string]string, len(tags))
 	for key, val := range tags {
-		//fmt.Println(key, " -> ", val)
 		sanitizedTags[key] = utils.SanitizeFilename(val)
 	}
 
 	// Execute the template with the album tags.
 	if textBuilder != nil {
 		err := textBuilder.Execute(&buffer, sanitizedTags)
-		//err := textBuilder.Execute(&buffer, tags)
 		if err != nil {
 			logger.Errorf(
 				ctx,
@@ -210,13 +208,11 @@ func (s *TemplateManagerImpl) GetAlbumFolderName(ctx context.Context, tags map[s
 
 			textBuilder = s.defaultAlbumFolderTemplate
 			_ = textBuilder.Execute(&buffer, sanitizedTags) //nolint:errcheck // Default template is always valid.
-			//_ = textBuilder.Execute(&buffer, tags) //nolint:errcheck // Default template is always valid.
 		}
 	} else {
 		// Use default template if custom template is nil.
 		textBuilder = s.defaultAlbumFolderTemplate
 		_ = textBuilder.Execute(&buffer, sanitizedTags) //nolint:errcheck // Default template is always valid.
-		//_ = textBuilder.Execute(&buffer, tags) //nolint:errcheck // Default template is always valid.
 	}
 
 	// Unescape HTML entities in the generated folder name.
